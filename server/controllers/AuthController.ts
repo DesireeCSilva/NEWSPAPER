@@ -42,9 +42,17 @@ export const loginUser = async (req: Request, res: Response) => {
             return res.status(401).send( {error: 'INVALID_PASSWORD'});
         }
 
-        const token = jwt.sign({id: user.id, role: user.role}, SECRET_KEY, {expiresIn: '24h'});
+        const token = jwt.sign({userId: user.id, role: user.role}, SECRET_KEY, {expiresIn: '24h'});
 
-        res.status(200).send({ message: 'USER_LOGIN_SUCCESSFULLY', token});
+        res.status(200).send({ 
+            message: 'USER_LOGIN_SUCCESSFULLY', 
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role
+            },
+            tokenUser: token});
     
     } catch(error: any) {
         
