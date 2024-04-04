@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import UserModel from '../models/UserModel';
 import { Request, Response } from 'express';
-import { SECRET_KEY } from '../config';
+import { createToken } from '../utils/jwt';
 
 //REGISTER
 export const registerUser = async (req: Request, res: Response) => {
@@ -17,9 +17,8 @@ export const registerUser = async (req: Request, res: Response) => {
             password: hashedPassword,
         });
 
-        const token = jwt.sign({ id: newUser.id, role: newUser.role }, SECRET_KEY, { expiresIn: '24h' });
+        const token = await createToken(newUser);
 
-        // Enviar el nuevo usuario y el token en la respuesta
         res.status(201).json({ user: newUser, token });
 
     } catch (error) {
@@ -42,7 +41,7 @@ export const loginUser = async (req: Request, res: Response) => {
             return res.status(401).send( {error: 'INVALID_PASSWORD'});
         }
 
-        const token = jwt.sign({userId: user.id, role: user.role}, SECRET_KEY, {expiresIn: '24h'});
+        const token = await createToken(user);
 
         res.status(200).send({ 
             message: 'USER_LOGIN_SUCCESSFULLY', 
