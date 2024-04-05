@@ -32,6 +32,8 @@ export const getOnePost = async (req: Request, res: Response) => {
 // POST (INSERT)
 export const addNewPost = async (req: Request, res: Response) =>{
 
+    const userId = res.locals.user.id;
+    
     try{
       const publishNews = await NewsModel.create(req.body);
       res.status(201).json(publishNews)
