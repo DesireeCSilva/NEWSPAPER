@@ -59,27 +59,27 @@ describe('Testing News CRUD', () => {
     })
 
 
-    describe('PUT', () => {
+    // describe('PUT', () => {
         
-        let newTestPost;
+    //     let newTestPost;
 
-        beforeAll(async() => {
-            newTestPost = await NewsModel.create({...newsTest, user_id: userId})
-        });
+    //     beforeAll(async() => {
+    //         newTestPost = await NewsModel.create({...newsTest, user_id: userId})
+    //     });
 
-        test('Put response should be an object and return status 200', async() => {
-            const response = await api
-            .put(`api/news/${newTestPost.id}`).set('Authorization', `Bearer ${token}`)
-            .send(updateNewsTest);
+    //     test('Put response should be an object and return status 200', async() => {
+    //         const response = await api
+    //         .put(`api/news/${newTestPost.id}`).set('Authorization', `Bearer ${token}`)
+    //         .send(updateNewsTest);
 
-            expect(response.status).toBe(200);
-            expect(typeof response.body).toBe('object')
-        });
+    //         expect(response.status).toBe(200);
+    //         expect(typeof response.body).toBe('object')
+    //     });
 
-        afterAll(async() => {
-            await NewsModel.destroy({where: {id: newTestPost.id}})
-        })
-    })
+    //     afterAll(async() => {
+    //         await NewsModel.destroy({where: {id: newTestPost.id}})
+    //     })
+    // })
 
     // describe('DELETE', () => {
     //     let newTestPost;

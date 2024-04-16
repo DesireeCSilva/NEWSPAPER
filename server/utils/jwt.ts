@@ -5,7 +5,8 @@ import { SECRET_KEY } from "../config";
 export const createToken = (user:any) => {
     const data =  { 
         role: user.role, 
-        id: user.id 
+        id: user.id, 
+        email: user.email
     };
     const token = jwt.sign(
         data, 

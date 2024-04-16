@@ -8,22 +8,22 @@ export const registerUser = async (req: Request, res: Response) =>{
 
     try{
 
-      const saltRounds = 10;
-      const password = req.body.password; 
-    
-      const encryptedPassword = await bcryptjs.hash(password, saltRounds);
-      req.body.password = encryptedPassword;
+        const saltRounds = 10;
+        const password = req.body.password; 
+        
+        const encryptedPassword = await bcryptjs.hash(password, saltRounds);
+        req.body.password = encryptedPassword;
 
-      const newUser:any = await UserModel.create(req.body);
-      const token = await createToken(newUser);
-      console.log(token + 'Hola desde el controlador')
-      res.status(201).json({newUser, token})
+        const newUser:any = await UserModel.create(req.body);
+        const token = await createToken(newUser);
+        console.log(token + 'Hola desde el controlador')
+        res.status(201).json({newUser, token})
+        }
+
+        catch(error: any){
+        res.status(500).json({message: error.message})
     }
-
-    catch(error: any){
-      res.status(500).json({message: error.message})
-  }
-  }
+}
 
 //Login
 

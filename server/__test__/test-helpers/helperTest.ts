@@ -24,4 +24,14 @@ export const adminTest = {
     email: "admintest@gmail.com",
     password: "1234",
     role: "admin"
+};
+
+export const UserLogin = {
+    email: 'adminuser@gmail.com',
+    password: '1234'
+};
+
+export const wrongUser = {
+    email: 'adminuser@gmail.com',
+    password: '1234'
 }
