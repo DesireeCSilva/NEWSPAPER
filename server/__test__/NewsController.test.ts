@@ -39,7 +39,7 @@ describe('Testing News CRUD', () => {
     describe('POST', () => {
 
         test("Users create a new post", async()=>{
-            const response = await request(app)
+            const response = await api
             .post('/api/news').set('Authorization', `Bearer ${token}`)
             .send(newsTest);
             console.log(response.body)
@@ -58,6 +58,41 @@ describe('Testing News CRUD', () => {
             
         });
     })
+
+    describe('DELETE', () => {
+        let newTestPost;
+        let response;
+
+        beforeEach(async() => {
+            newTestPost = await api.post('api/news').set('Authorization', `Bearer ${token}`).send(newsTest);
+            console.log(newTestPost.body)
+            
+            response = await api.delete(`api/news/${newTestPost.body.id}`).set('Authorization', `Bearer ${token}`).send()
+        });
+
+        test('Delete method should be 200 status', () => {
+            expect(response.status).toBe(200)
+        })
+    })
+
+    // describe('DELETE', () => {
+    //     test("Delete a post", async () => {
+    //         const response = await api.delete(`/api/news/${newsId}`).set('Authorization', `Bearer ${token}`);
+    //         expect(response.status).toBe(200);
+    //     });
+    // });
+
+    // describe('PUT', () => {
+    //     test("Update a post", async () => {
+    //         const updatedNews = {
+    //             title: "Updated Title",
+    //             content: "Updated Content"
+    //         };
+
+    //         const response = await api.put(`/api/news/${newsId}`).set('Authorization', `Bearer ${token}`).send(updatedNews);
+    //         expect(response.status).toBe(200);
+    //     });
+    // });
 
 
     afterAll( async () => {
