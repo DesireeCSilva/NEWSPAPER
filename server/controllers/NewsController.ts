@@ -57,7 +57,7 @@ export const editPost = async (req: Request, res: Response) =>{
     await NewsModel.update(req.body, {where: {id: newsId} }); 
 
     const editedPost = await NewsModel.findOne({ where: { id: newsId } });  
-    res.status(200).json({ message: `Sculpture with ID ${newsId} updated successfully: `, news: editedPost })  
+    res.status(201).json({ message: `Post with ID ${newsId} updated successfully: `, news: editedPost })  
   }
 
   catch(error){

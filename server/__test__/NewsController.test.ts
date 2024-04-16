@@ -3,7 +3,7 @@ import { app, server } from '../app';
 import connection_db from '../database/connection_db';
 import NewsModel from '../models/NewsModel';
 import UserModel from '../models/UserModel';
-import { newsTest, adminTest } from '../__test__/test-helpers/helperTest';
+import { newsTest, adminTest, updateNewsTest } from '../__test__/test-helpers/helperTest';
 import { createToken } from '../utils/jwt';
 
 
@@ -48,48 +48,58 @@ describe('Testing News CRUD', () => {
             expect(response.body.content).toBeDefined();
             expect(response.body.title).toBeDefined();
         })
-        
-        afterAll(async () => {
+
+        afterAll(async() => { 
             await NewsModel.destroy({
                 where: {
                     title: "Test"
                 }
             }); 
-            
-        });
+        })
     })
 
-    describe('DELETE', () => {
-        let newTestPost;
-        let response;
 
-        beforeEach(async() => {
-            newTestPost = await api.post('api/news').set('Authorization', `Bearer ${token}`).send(newsTest);
-            console.log(newTestPost.body)
-            
-            response = await api.delete(`api/news/${newTestPost.body.id}`).set('Authorization', `Bearer ${token}`).send()
+    describe('PUT', () => {
+        
+        let newTestPost;
+
+        beforeAll(async() => {
+            newTestPost = await NewsModel.create({...newsTest, user_id: userId})
         });
 
-        test('Delete method should be 200 status', () => {
-            expect(response.status).toBe(200)
+        test('Put response should be an object and return status 200', async() => {
+            const response = await api
+            .put(`api/news/${newTestPost.id}`).set('Authorization', `Bearer ${token}`)
+            .send(updateNewsTest);
+
+            expect(response.status).toBe(200);
+            expect(typeof response.body).toBe('object')
+        });
+
+        afterAll(async() => {
+            await NewsModel.destroy({where: {id: newTestPost.id}})
         })
     })
 
     // describe('DELETE', () => {
+    //     let newTestPost;
+    //     let response;
+
+    //     beforeEach(async() => {
+    //         newTestPost = await api.post('api/news').set('Authorization', `Bearer ${token}`).send(newsTest);
+    //         console.log(newTestPost.body)
+            
+    //         response = await api.delete(`api/news/${newTestPost.body.id}`).set('Authorization', `Bearer ${token}`).send()
+    //     });
+
+    //     test('Delete method should be 200 status', () => {
+    //         expect(response.status).toBe(200)
+    //     })
+    // })
+
+    // describe('DELETE', () => {
     //     test("Delete a post", async () => {
     //         const response = await api.delete(`/api/news/${newsId}`).set('Authorization', `Bearer ${token}`);
-    //         expect(response.status).toBe(200);
-    //     });
-    // });
-
-    // describe('PUT', () => {
-    //     test("Update a post", async () => {
-    //         const updatedNews = {
-    //             title: "Updated Title",
-    //             content: "Updated Content"
-    //         };
-
-    //         const response = await api.put(`/api/news/${newsId}`).set('Authorization', `Bearer ${token}`).send(updatedNews);
     //         expect(response.status).toBe(200);
     //     });
     // });
@@ -100,9 +110,9 @@ describe('Testing News CRUD', () => {
             where: {
                 id: userId
             }
-        });
-        server.close();
-        connection_db.close();
+        })
+        await server.close()
+        await connection_db.close();
     });
 
 });

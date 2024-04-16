@@ -9,7 +9,7 @@ export const updateNewsTest = {
     title: "Test",
     content: "Test",
     date: "2024-04-12",
-    image: "www.testimage.com"
+    image: "www.updateimage.com"
 }; 
 
 export const editedData = {
